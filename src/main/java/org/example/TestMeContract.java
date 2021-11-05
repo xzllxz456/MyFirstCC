@@ -45,7 +45,7 @@ public class TestMeContract implements ContractInterface {
      * @return the Car found on the ledger if there was one
      */
     @Transaction()
-    public boolean javaExists(Context ctx, String key) {
+    public boolean myExists(Context ctx, String key) {
         byte[] buffer = ctx.getStub().getState(key);
         return (buffer != null && buffer.length > 0);
     }
@@ -63,7 +63,7 @@ public class TestMeContract implements ContractInterface {
      */
     @Transaction()
     public void createMe(Context ctx, String key,String name,String id, String token) {
-        boolean exists = javaExists(ctx,key);
+        boolean exists = myExists(ctx,key);
         ChaincodeStub stub = ctx.getStub();
         if (exists) {
             throw new RuntimeException("The asset "+key+" already exists");
@@ -85,9 +85,9 @@ public class TestMeContract implements ContractInterface {
      * @return the Car found on the ledger if there was one
      */
     @Transaction()
-    public TestMe readTest(Context ctx, String key) {
+    public TestMe myReadTest(Context ctx, String key) {
         ChaincodeStub stub = ctx.getStub();
-        boolean exists = javaExists(ctx,key);
+        boolean exists = myExists(ctx,key);
         if (!exists) {
             throw new RuntimeException("The asset "+key+" does not exist");
         }
@@ -107,9 +107,9 @@ public class TestMeContract implements ContractInterface {
      * @return the Car found on the ledger if there was one
      */
     @Transaction()
-    public void updateJava(Context ctx, String key, String name, String token) {
+    public void myUpdateJava(Context ctx, String key, String name, String token) {
         ChaincodeStub stub = ctx.getStub();
-        boolean exists = javaExists(ctx,key);
+        boolean exists = myExists(ctx,key);
         if (!exists) {
             throw new RuntimeException("The asset "+key+" does not exist");
         }
@@ -123,8 +123,8 @@ public class TestMeContract implements ContractInterface {
     }
 
     @Transaction()
-    public void deleteJava(Context ctx, String key) {
-        boolean exists = javaExists(ctx,key);
+    public void myDeleteJava(Context ctx, String key) {
+        boolean exists = myExists(ctx,key);
         if (!exists) {
             throw new RuntimeException("The asset "+key+" does not exist");
         }

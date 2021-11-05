@@ -33,7 +33,7 @@ public final class TestContractTest {
             when(ctx.getStub()).thenReturn(stub);
 
             when(stub.getState("10001")).thenReturn(new byte[] {});
-            boolean result = contract.javaExists(ctx,"10001");
+            boolean result = contract.myExists(ctx,"10001");
 
             assertFalse(result);
         }
@@ -47,7 +47,7 @@ public final class TestContractTest {
             when(ctx.getStub()).thenReturn(stub);
 
             when(stub.getState("10001")).thenReturn(new byte[] {42});
-            boolean result = contract.javaExists(ctx,"10001");
+            boolean result = contract.myExists(ctx,"10001");
 
             assertTrue(result);
 
@@ -61,7 +61,7 @@ public final class TestContractTest {
             when(ctx.getStub()).thenReturn(stub);
 
             when(stub.getState("10002")).thenReturn(null);
-            boolean result = contract.javaExists(ctx,"10002");
+            boolean result = contract.myExists(ctx,"10002");
 
             assertFalse(result);
 
@@ -69,106 +69,106 @@ public final class TestContractTest {
 
     }
 
-    // @Nested
-    // class AssetCreates {
+    @Nested
+    class AssetCreates {
 
-    //     @Test
-    //     public void newAssetCreate() {
-    //         TestContract contract = new  TestContract();
-    //         Context ctx = mock(Context.class);
-    //         ChaincodeStub stub = mock(ChaincodeStub.class);
-    //         when(ctx.getStub()).thenReturn(stub);
+        @Test
+        public void newAssetCreate() {
+            TestMeContract contract = new  TestMeContract();
+            Context ctx = mock(Context.class);
+            ChaincodeStub stub = mock(ChaincodeStub.class);
+            when(ctx.getStub()).thenReturn(stub);
 
-    //         String json = "{\"value\":\"TheTest\"}";
+            String json = "{\"value\":\"TheTest\"}";
 
-    //         contract.createTest(ctx, "10001", "TheTest");
+            contract.createMe(ctx, "10001", "nemeTheTest", "idtest", "tokentest");
 
-    //         verify(stub).putState("10001", json.getBytes(UTF_8));
-    //     }
+            verify(stub).putState("10001", json.getBytes(UTF_8));
+        }
 
-    //     @Test
-    //     public void alreadyExists() {
-    //         TestContract contract = new  TestContract();
-    //         Context ctx = mock(Context.class);
-    //         ChaincodeStub stub = mock(ChaincodeStub.class);
-    //         when(ctx.getStub()).thenReturn(stub);
+        @Test
+        public void alreadyExists() {
+            TestMeContract contract = new  TestMeContract();
+            Context ctx = mock(Context.class);
+            ChaincodeStub stub = mock(ChaincodeStub.class);
+            when(ctx.getStub()).thenReturn(stub);
 
-    //         when(stub.getState("10002")).thenReturn(new byte[] { 42 });
+            when(stub.getState("10002")).thenReturn(new byte[] { 42 });
 
-    //         Exception thrown = assertThrows(RuntimeException.class, () -> {
-    //             contract.createTest(ctx, "10002", "TheTest");
-    //         });
+            Exception thrown = assertThrows(RuntimeException.class, () -> {
+                contract.createMe(ctx, "10001", "nemeTest", "idTest", "tokenTest");
+            });
 
-    //         assertEquals(thrown.getMessage(), "The asset 10002 already exists");
+            assertEquals(thrown.getMessage(), "The asset 10002 already exists");
 
-    //     }
+        }
 
-    // }
+    }
 
-    // @Test
-    // public void assetRead() {
-    //     TestContract contract = new  TestContract();
-    //     Context ctx = mock(Context.class);
-    //     ChaincodeStub stub = mock(ChaincodeStub.class);
-    //     when(ctx.getStub()).thenReturn(stub);
+    @Test
+    public void assetRead() {
+        TestMeContract contract = new  TestMeContract();
+        Context ctx = mock(Context.class);
+        ChaincodeStub stub = mock(ChaincodeStub.class);
+        when(ctx.getStub()).thenReturn(stub);
 
-    //     Test asset = new  Test();
-    //     asset.setValue("Valuable");
+        TestMe asset = new TestMe("nemeTest", "idTest", "tokenTest"); 
+        // asset.setValue("Valuable");
 
-    //     String json = asset.toJSONString();
-    //     when(stub.getState("10001")).thenReturn(json.getBytes(StandardCharsets.UTF_8));
+        String json = asset.toJSONString();
+        when(stub.getState("10001")).thenReturn(json.getBytes(StandardCharsets.UTF_8));
 
-    //     Test returnedAsset = contract.readTest(ctx, "10001");
-    //     assertEquals(returnedAsset.getValue(), asset.getValue());
-    // }
+        TestMe returnedAsset = contract.myReadTest(ctx, "10001");
+        assertEquals(returnedAsset.getId(), asset.getId());
+    }
 
-    // @Nested
-    // class AssetUpdates {
-    //     @Test
-    //     public void updateExisting() {
-    //         TestContract contract = new  TestContract();
-    //         Context ctx = mock(Context.class);
-    //         ChaincodeStub stub = mock(ChaincodeStub.class);
-    //         when(ctx.getStub()).thenReturn(stub);
-    //         when(stub.getState("10001")).thenReturn(new byte[] { 42 });
+    @Nested
+    class AssetUpdates {
+        @Test
+        public void updateExisting() {
+            TestMeContract contract = new  TestMeContract();
+            Context ctx = mock(Context.class);
+            ChaincodeStub stub = mock(ChaincodeStub.class);
+            when(ctx.getStub()).thenReturn(stub);
+            when(stub.getState("10001")).thenReturn(new byte[] { 42 });
 
-    //         contract.updateTest(ctx, "10001", "updates");
+            contract.myUpdateJava(ctx, "10001", "updatesname", "updatetoken");
 
-    //         String json = "{\"value\":\"updates\"}";
-    //         verify(stub).putState("10001", json.getBytes(UTF_8));
-    //     }
+            String json = "{\"value\":\"updatesname\"}";
+            verify(stub).putState("10001", json.getBytes(UTF_8));
+        }
 
-    //     @Test
-    //     public void updateMissing() {
-    //         TestContract contract = new  TestContract();
-    //         Context ctx = mock(Context.class);
-    //         ChaincodeStub stub = mock(ChaincodeStub.class);
-    //         when(ctx.getStub()).thenReturn(stub);
+        @Test
+        public void updateMissing() {
+            TestMeContract contract = new  TestMeContract();
+            Context ctx = mock(Context.class);
+            ChaincodeStub stub = mock(ChaincodeStub.class);
+            when(ctx.getStub()).thenReturn(stub);
 
-    //         when(stub.getState("10001")).thenReturn(null);
+            when(stub.getState("10001")).thenReturn(null);
 
-    //         Exception thrown = assertThrows(RuntimeException.class, () -> {
-    //             contract.updateTest(ctx, "10001", "TheTest");
-    //         });
+            Exception thrown = assertThrows(RuntimeException.class, () -> {
+                contract.myUpdateJava(ctx, "10001", "updatesname", "updatetoken");
+            });
 
-    //         assertEquals(thrown.getMessage(), "The asset 10001 does not exist");
-    //     }
+            assertEquals(thrown.getMessage(), "The asset 10001 does not exist");
+        }
 
-    // }
+    }
 
-    // @Test
-    // public void assetDelete() {
-    //     TestContract contract = new  TestContract();
-    //     Context ctx = mock(Context.class);
-    //     ChaincodeStub stub = mock(ChaincodeStub.class);
-    //     when(ctx.getStub()).thenReturn(stub);
-    //     when(stub.getState("10001")).thenReturn(null);
+    @Test
+    public void assetDelete() {
+        TestMeContract contract = new  TestMeContract();
+        Context ctx = mock(Context.class);
+        ChaincodeStub stub = mock(ChaincodeStub.class);
+        when(ctx.getStub()).thenReturn(stub);
+        when(stub.getState("10001")).thenReturn(null);
 
-    //     Exception thrown = assertThrows(RuntimeException.class, () -> {
-    //         contract.deleteTest(ctx, "10001");
-    //     });
+        Exception thrown = assertThrows(RuntimeException.class, () -> {
+            contract.myDeleteJava(ctx, "10001");
+        });
 
-    //     assertEquals(thrown.getMessage(), "The asset 10001 does not exist");
-    // }
+        assertEquals(thrown.getMessage(), "The asset 10001 does not exist");
+    }
 
 }
